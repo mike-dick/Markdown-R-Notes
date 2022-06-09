@@ -386,3 +386,93 @@ mtcars["mpg"]
 #Returning multiple cols.
 mtcars[c('mpg', 'cyl')]
 ```
+
+Let's move into the area where we want to add two new rows to a data frame. The first column we are adding the value `2000` and in the second we are adding the string `new`.
+```r
+#Adding rows to a df
+df2 <- data.frame(col.name.1 = 2000, col.name.2 = "new")
+```
+Now we are going to use the function `rbind`. This will bind this new row to an already existing data frame. We will store this new data frame in a data frame called `dfnew`.
+```r
+#Will use rbind
+dfnew <- rbind(df1,df2)
+```
+Adding more columns to a data frame is done by accessing a data frame with `$`, but accessing it with the new name. Look at this example:
+```r
+#Doubles the first column of dfnew and saves this into
+#a new column stored into dfnew.
+dfnew$NEW_COL <- 2*dfnew$col.name.1
+   col.name.1 col.name.2 NEW_COL
+   #Output:
+# 1           1          a       2
+# 2           2          b       4
+# 3           3          c       6
+# 4           4          d       8
+# 5           5       9999      10
+# 6           6          f      12
+# 7           7          g      14
+# 8           8          h      16
+# 9           9          i      18
+# 10         10          j      20
+# 11       2000        new    4000
+```
+Renaming columns can be done in two ways: many columns or one column. Let's look at both! If we are addressing multiple columns we are going to make a vector of them and use the function `colnames()` and pass into the parameters the data frame we want to rename. Renaming a single column is almost the same, but we must specify which column number it is within brackets.
+```r
+#Renaming columns.
+colnames(dfnew) <- c("first", "second", "third")
+#Selecting a certain column,
+colnames(dfnew)[3] <- "NEWCOLNAME"
+#Output:
+#    first second NEWCOLNAME
+# 1      1      a          2
+# 2      2      b          4
+# 3      3      c          6
+# 4      4      d          8
+# 5      5   9999         10
+# 6      6      f         12
+# 7      7      g         14
+# 8      8      h         16
+# 9      9      i         18
+# 10    10      j         20
+# 11  2000    new       4000
+```
+In R, there is this neat command where we can select every row or column by simply putting a `-` in-front of the row or column number.
+```r
+#Selecting every row but 2 thru 7.
+df[-c(2:7),]
+#OUTPUT:
+#    first second NewColName
+# 1      1      a          2
+# 8      8      h         16
+# 9      9      i         18
+# 10    10      j         20
+```
+Conditional selection in data frames can be done by selecting the data frame you want and then in brackets selecting the data frame then accessing its columns with `$` then apply a logical operator. The example is showing all cars that have a mpg over 30.
+```r
+#Conditional Selection in dfs.
+#Returns all cars that have mpg > 30.
+mtcars[mtcars$mpg > 30, ]
+#Returns the row where both of these conditions are true.
+mtcars[mtcars$mpg > 20 & mtcars$cyl == 6, ]
+#Returns specific columns.
+mtcars[mtcars$mpg > 20 & mtcars$cyl == 6, c("mpg", "cyl", "hp")]
+```
+Now with some data frames that are imported from raw .csv files might be missing some data in certain cells. We can check if that is true by using `is.na()` function, and inside the parameters we pass in the data frame we want to use. It will return `FALSE` when the data cell is not empty and `TRUE` if it is. We can also use `any()` function; this function will return `FALSE` if all data cells are populated with data. Below are some examples with comment explanations.
+```r
+#Dealing with missing data.
+#Detecting N/A or NULL data points. All false because no missing data point.
+is.na(mtcars)
+#any checks if any of these are true. If it returns false than that means
+#that we have all good data points (i.e., none of them were NULL).
+any(is.na(df))
+#Checking columns of mtcars.
+any(is.na(mtcars$mpg))
+```
+Let's say that we are missing some data in some data frame called `df`. Well, we can replace it by setting it to `0` or by replacing it with the mean of that column. Below are two examples. First is replacing any data point that comes back `TRUE` and replacing the `NULL` value with `0`. The other is replacing the missing data with the mean of the column of `mpg` .
+```r
+#Replace missing data with 0.
+df[is.na(df)] <- 0
+#Replace a certain column of missing data.
+#If there is any missing data it is replaced by the mean of the mpg column.
+mtcars$mpg[is.na(mtcars$mpg)] <- mean(mtcars$mpg)
+```
