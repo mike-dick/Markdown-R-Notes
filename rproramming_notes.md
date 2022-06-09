@@ -300,3 +300,89 @@ df[sortedTemp, ]
 # 5   Fri   77 FALSE
 # 1   Mon   78  TRUE
 ```
+## Overview of Data Frame Operations
+In R, data frames are one of the most attractive features. We can make enormous data frames and perform all kinds of calculations, data manipulations, etc. Let's first make a empty data frame. We will name it `emptydf`, and to make a data frame we need the `data.frame()` built in R function.
+```r
+#Making an empty dataframe.
+emptydf <- data.frame()
+```
+
+Now, let's make a data frame. We will make a vector that is 1-10, and another that are the first ten letters of the English alphabet. `letters` is a library in R that contain the twenty-six English letters of the alphabet.
+```r
+#Making a vector 1-10.
+c1 <- 1:10
+#Assigning c2 letters from the alphabet. The first ten.
+c2 <- letters[1:10]
+```
+Naming columns are R can be done by the `data.frame()` function that is built into R. You can rename the columns by doing the following: 
+```r
+#c1 is named col.name.1, and c2 is named col.name..2
+df1 <- data.frame(col.name.1 = c1, col.name.2 = c2)
+# Output:
+# > df1
+#    col.name.1 col.name.2
+# 1           1          a
+# 2           2          b
+# 3           3          c
+# 4           4          d
+# 5           5          e
+# 6           6          f
+# 7           7          g
+# 8           8          h
+# 9           9          i
+# 10         10          j
+```
+From the example above, we see that `c1` is associated with the first column name. So in the parameters of creating the data frame we assign `c1` to the name of `col.name.1`.
+
+A very important feature with R is that we can read `.csv` files. We can import these `.csv` files to a data frame. For this example we are going to import the famous Iris data frame into a data frame called `df2`. We have `iris.csv` in the same working directory as our R project. Below is the syntax used to assign the `.csv` file to `df2`.
+```r
+#Importing .csv files
+df2 <- read.csv("iris.csv")
+```
+We can save our data frames as a `.csv`. Let's say we want to save our first data frame `df1`. We would perform the following:
+```r
+#Write to a .csv! syntax is dataframe, then what the name of the file is.
+write.csv(df1, file = "save_df.csv")
+```
+As said in the comments, the first parameter is the data frame you want to be saved as a `.csv` and the second is the name we want the file to be named. When looking at the data frame after we save it we see there is an extra `X` column. This is just the indices that were saved. We can remove these with `subset()`.
+```r
+#Removes the X column.
+df1_copy <- subset(df1_copy, select = -X)
+```
+
+Below are simple examples on how to get the umber of rows, columns, and names of the columns.
+```r
+#Getting the number of rows in a data frame.
+nrow(df1)
+#Getting number of cols.
+ncol(df1)
+#Getting names of cols.
+colnames(df1)
+#Structure of the data frame.
+str(df1)
+```
+With data frames we can reference a single cell and make changes to it. Let's say we want to get `e` in `df1` we would perform either `df[[5,2]]` or `df[[5,col.name.2]]`. These both say the same thing; go to row five and then column two. Now let's say we want to change `e` to a number like `616`. We can do this by the assignment operator `<-` onto the cell of the data frame.
+```r
+#Reference a single cell in a df.
+df1[[5,2]]
+#Changing value of a single cell.
+df1[[5,"col.name.2"]] <- 9999
+```
+
+Large data frames we want to search for a certain column name. We can do this with the `$` operator. This acts as a `.` operator in a language like C++. For this example we will use the data frame of `mtcars`. Using the operators below will return a vector of the column.
+```r
+#We are going inside df and using $ to access the column name.
+mtcars$mpg
+#Same thing as above.
+mtcars[, "mpg"]
+mtcars[, 1]
+```
+We have options when it comes to returning a certain column as a data frame or a vector. Below will show the two methods of one set of braces versus two sets of braces.
+```r
+#Returns vector
+mtcars[["mpg"]]
+#Returns a df.
+mtcars["mpg"]
+#Returning multiple cols.
+mtcars[c('mpg', 'cyl')]
+```
